@@ -339,6 +339,7 @@ class editarDiaDietaView(UpdateView):
                     #     s.producto_empresa.stock = float(s.producto_empresa.stock) + float(s.gramaje4)
                     #     s.producto_empresa.save()
                     #     s.delete()
+
                     for i in items:
                         inv = DetalleDiaDieta()
                         inv.dieta_id = factura.pk
