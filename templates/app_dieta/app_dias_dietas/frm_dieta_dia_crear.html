@@ -1,0 +1,398 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head %}
+    <link href="{% static 'acciones/app_inventario/app_categoria/tabla_listado/css/tab.css' %}" rel="stylesheet">
+    <link href="{% static 'acciones/app_dieta/tabla_botones/css/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'acciones/app_dieta/tabla_botones/css/jquery.dataTables.css' %}"/>
+
+    <link href="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
+
+    <link href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
+
+{% endblock %}
+
+{% block contenido %}
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h5 class="m-0 text-dark">
+                        &nbsp  <b> Registro de {{ nombre }}</b>
+                        <i class="far nav-icon fa fa-clipboard-check"></i>
+                    </h5>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">{{ nombre }}</a>
+                        </li>
+                        <li class="breadcrumb-item active">Listado de {{ nombre }}
+                        </li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" style="background-color: #0d8ddb">
+                <h3 class="card-title"><i class="fas fa-ship"></i><b> &nbsp {{ nombre }} Registro</b></h3>
+            </div>
+            <div class="card-footer bg-white">
+                <div class="card-body">
+                    <table id="example" class="table">
+                        <thead style="background-color:#3498DB">
+                        <tr>
+                            <th style="width: 2%;">#</th>
+                            <th style="width: 5%;">Piscina</th>
+                            <th style="width: 15%;">Balanceado</th>
+                            <th style="width: 5%;">Lbs</th>
+                            <th style="width: 10%;">Insumo 1</th>
+                            <th style="width: 5%">Gramos</th>
+                            <th style="width: 10%;">Insumo 2</th>
+                            <th style="width: 5%">Gramos</th>
+                            <th style="width: 8%;">Insumo 3</th>
+                            <th style="width: 5%">Gramos</th>
+                            <th style="width: 10%;">Insumo 4</th>
+                            <th style="width: 5%">Gramos</th>
+                            <th style="visibility: hidden; width: 0%">Reg.</th>
+                        </tr>
+                        </thead>
+                        {% csrf_token %}
+                        <tbody>
+                        {% if dieta_registros %}
+                            {% for dato in dieta_registros %}
+                                <tr>
+                                    <td>
+                                        {{ dato.piscinas.id }}
+                                    </td>
+                                    <td>
+                                        {{ dato.piscinas.numero }}
+                                    </td>
+                                    <td>
+                                        <select name="opcion" class="form-control select2">
+                                            <option value="0">------</option>
+                                            {% for balanceado in balanceados %}
+                                                <option value="{{ balanceado.id }}"
+                                                        {% if dato.balanceado_id == balanceado.id %}selected="{{ dato.balanceado_id }}"{% endif %}>{{ balanceado.nombre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" value="{% if dato.cantidad > 0 %}{{ dato.cantidad }}{% else %}0{% endif %}" class="form-control">
+                                    </td>
+                                    <td>
+                                        <select name="opcion" class="form-control">
+                                            <option value="0">------</option>
+                                            {% for insumo in insumos %}
+                                                <option gramaje="{{ insumo.gramaje }}"
+                                                        value="{{ insumo.id }}"
+                                                        {% if dato.insumo1 == insumo.id %}selected="{{ dato.insumo1 }}"{% endif %}>{{ insumo.nombre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" value="0" readonly="readonly" class="form-control">
+                                    </td>
+                                    <td>
+                                        <select name="opcion" class="form-control">
+                                            <option value="0">------</option>
+                                            {% for insumo in insumos %}
+                                                <option gramaje="{{ insumo.gramaje }}"
+                                                        {% if dato.insumo2 == insumo.id %}selected="{{ dato.insumo2 }}"{% endif %}
+                                                        value="{{ insumo.id }}">{{ insumo.nombre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" value="0" readonly="readonly" class="form-control">
+                                    </td>
+                                    <td>
+                                        <select name="opcion" class="form-control">
+                                            <option value="0">------</option>
+                                            {% for insumo in insumos %}
+                                                <option gramaje="{{ insumo.gramaje }}"
+                                                        {% if dato.insumo3 == insumo.id %}selected="{{ dato.insumo3 }}"{% endif %}
+                                                        value="{{ insumo.id }}">{{ insumo.nombre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" value="0" readonly="readonly" class="form-control">
+                                    </td>
+                                    <td>
+                                        <select name="opcion" class="form-control">
+                                            <option value="0">------</option>
+                                            {% for insumo in insumos %}
+                                                <option gramaje="{{ insumo.gramaje }}"
+                                                        {% if dato.insumo4 == insumo.id %}selected="{{ dato.insumo4 }}"{% endif %}
+                                                        value="{{ insumo.id }}">{{ insumo.nombre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" value="0" readonly="readonly" class="form-control">
+                                    </td>
+                                    <td style="visibility: hidden">
+                                        {{ dato.id }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                        {% else %}
+                            {% for dato in piscinas %}
+                                <tr class="piscina">
+                                    <td>{{ dato.id }}</td>
+                                    <td>{{ dato.numero }}</td>
+                                    <td>
+                                        <select name="opcion" class="form-control select2">
+                                            <option value="0">------</option>
+                                            {% for balanceado in balanceados %}
+                                                <option value="{{ balanceado.id }}">{{ balanceado.nombre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" value="0" class="form-control">
+                                    </td>
+                                    <td>
+                                        <select name="opcion" class="form-control">
+                                            <option value="0">------</option>
+                                            {% for insumo in insumos %}
+                                                <option gramaje="{{ insumo.gramaje }}"
+                                                        value="{{ insumo.id }}">{{ insumo.nombre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" value="0" readonly="readonly" class="form-control">
+                                    </td>
+                                    <td>
+                                        <select name="opcion" class="form-control">
+                                            <option value="0">------</option>
+                                            {% for insumo in insumos %}
+                                                <option gramaje="{{ insumo.gramaje }}"
+                                                        value="{{ insumo.id }}">{{ insumo.nombre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" value="0" readonly="readonly" class="form-control">
+                                    </td>
+                                    <td>
+                                        <select name="opcion" class="form-control">
+                                            <option value="0">------</option>
+                                            {% for insumo in insumos %}
+                                                <option gramaje="{{ insumo.gramaje }}"
+                                                        value="{{ insumo.id }}">{{ insumo.nombre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" value="0" readonly="readonly" class="form-control">
+                                    </td>
+                                    <td>
+                                        <select name="opcion" class="form-control">
+                                            <option value="0">------</option>
+                                            {% for insumo in insumos %}
+                                                <option gramaje="{{ insumo.gramaje }}"
+                                                        value="{{ insumo.id }}">{{ insumo.nombre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" value="0" readonly="readonly" class="form-control">
+                                    </td>
+                                    <td style="visibility: hidden">0</td>
+                                </tr>
+
+                            {% endfor %}
+                        {% endif %}
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <!-- /.card-footer -->
+            <div class="card-footer" style="background-color: #0d8ddb">
+                <button type="submit" id="registrar" class="btn btn-success"
+                        onclick="registar()">
+                    <i class="fas fa-save"></i>&nbsp Guardar
+                </button>
+                <a href="{% url 'app_dieta:reporte_dieta' pk %}" target="_blank" type="button" class="btn btn-light">
+                    <i class="fas fa-print"></i>&nbsp Imprimir
+                </a>
+                <a href="{% url 'app_dieta:listar_descripcion_dieta' %}" type="button" class="btn btn-secondary">
+                    <i class="fas fa-file-image"></i>&nbsp Escaneado
+                </a>
+                <a href="/dieta/listar/dia/{{ mes.id }}/" type="button" class="btn btn-danger">
+                    <i class="fas fa-reply"></i> Regresar
+                </a>
+            </div>
+            <!-- /.card-footer -->
+        </div>
+        <!-- /.card -->
+    </div>
+    {% csrf_token %}
+{% endblock %}
+
+{% block scripts %}
+
+    <script src="{% static 'acciones/app_dieta/tabla_botones/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'acciones/app_dieta/tabla_botones/js/jquery-3.4.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'acciones/app_dieta/tabla_botones/js/pdfmake.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'acciones/app_dieta/tabla_botones/js/vfs_fonts.js' %}"></script>
+    <script type="text/javascript" src="{% static 'acciones/app_dieta/tabla_botones/js/datatables.min.js' %}"></script>
+
+
+    <script type="application/javascript">
+        $(function () {
+            $('#example').DataTable({
+                {#dom: 'Bfrtip',#}
+                buttons: [{
+                        extend: 'collection',
+                        text: 'Opciones',
+                        buttons: [
+                            'copy',
+                            'excel',
+                            'csv',
+                            'pdf',
+                            'print'
+                        ]
+                }],
+                "responsive": true,
+                "autoWidth": true,
+                "scrollY": "700px",
+                "scrollX": true,
+                "scrollCollapse": false,
+                "paging": false,
+                "language": {
+                    url: '{% static 'lib/datatables-1.10.20/spanish.txt' %}'
+                },
+                columnDefs: [{
+                    orderable: false,
+                    targets: [0, 1, 2, 3],
+                    //targets: [ 0 ],
+                    //visible: false,
+                    //searchable: false
+                }]
+            });
+
+            $('#example tbody').on('click', 'tr', function () {
+                $(this).toggleClass('selected');
+            });
+
+        });
+    </script>
+
+    <script type="application/javascript">
+
+        function calculos(libras, gramaje) {
+            calculo = parseInt(libras) * eval(gramaje)
+            return calculo
+        }
+
+        $('td').change(function () {
+
+            var row_index = $(this).parent().index();
+            id = $(this).parent().find('td').eq(0).text().trim()
+            id_balanceado = $(this).parent().find('td').eq(2).children(1).val()
+            libras = $(this).parent().find('td').eq(3).children(1).val()
+            lib = $(this).parent().find('td').eq(3).children(1)
+
+            if (id_balanceado) {
+
+                insumo1 = $(this).parent().find('td').eq(4).children(1).val()
+                gramaje1 = $(this).parent().find('td').eq(4).children(1).find('option:selected').attr('gramaje')
+                $(this).parent().find('td').eq(5).children(1).val(calculos(libras, gramaje1).toFixed(0))
+
+                insumo2 = $(this).parent().find('td').eq(6).children(1).val()
+                gramaje2 = $(this).parent().find('td').eq(6).children(1).find('option:selected').attr('gramaje')
+                $(this).parent().find('td').eq(7).children(1).val(calculos(libras, gramaje2).toFixed(0))
+
+                insumo3 = $(this).parent().find('td').eq(8).children(1).val()
+                gramaje3 = $(this).parent().find('td').eq(8).children(1).find('option:selected').attr('gramaje')
+                $(this).parent().find('td').eq(9).children(1).val(calculos(libras, gramaje3).toFixed(0))
+
+                insumo4 = $(this).parent().find('td').eq(10).children(1).val()
+                gramaje4 = $(this).parent().find('td').eq(10).children(1).find('option:selected').attr('gramaje')
+                $(this).parent().find('td').eq(11).children(1).val(calculos(libras, gramaje4).toFixed(0))
+
+            }
+
+        }).change()
+
+
+        function registar() {
+            let acumulador = 0
+            let id = 0
+            let id_piscina = 0
+            let id_balanceado = 0
+            let cantidad = 0
+            let insumo1 = 0
+            let gramaje1 = 0
+            let insumo2 = 0
+            let gramaje2 = 0
+            let insumo3 = 0
+            let gramaje3 = 0
+            let insumo4 = 0
+            let gramaje4 = 0
+
+            $("#example > tbody tr").each(function () {
+
+                id_piscina = $(this).find('td').eq(0).text().trim()
+                id_balanceado = $(this).find('td').eq(2).children(1).val()
+                cantidad = $(this).find('td').eq(3).children(1).val()
+                insumo1 = $(this).find('td').eq(4).children(1).val()
+                gramaje1 = $(this).find('td').eq(5).children(1).val()
+                insumo2 = $(this).find('td').eq(6).children(1).val()
+                gramaje2 = $(this).find('td').eq(7).children(1).val()
+                insumo3 = $(this).find('td').eq(8).children(1).val()
+                gramaje3 = $(this).find('td').eq(9).children(1).val()
+                insumo4 = $(this).find('td').eq(10).children(1).val()
+                gramaje4 = $(this).find('td').eq(11).children(1).val()
+                id = $(this).find('td').eq(12).text().trim()
+                acumulador += 1
+
+                let uri = {% if dieta_registros %}'/dieta/crear/dia/edit/'
+                    {% else %}'/dieta/crear/dia/{{ pk }}/'{% endif %}
+
+                $.post(uri, {
+                    dieta: '{{ pk }}',
+                    id: id,
+                    piscinas: id_piscina,
+                    balanceado: id_balanceado,
+                    cantidad: cantidad,
+                    insumo1: insumo1,
+                    gramaje1: gramaje1,
+                    insumo2: insumo2,
+                    gramaje2: gramaje2,
+                    insumo3: insumo3,
+                    gramaje3: gramaje3,
+                    insumo4: insumo4,
+                    gramaje4: gramaje4,
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+
+                }, function (resultado) {
+                    console.log(resultado)
+                });
+            })
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Información registrada correctamente',
+                showConfirmButton: false,
+                timer: 1000
+            });
+
+        }
+    </script>
+
+{% endblock %}

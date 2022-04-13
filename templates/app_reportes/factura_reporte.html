@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Guia  {{ numero_guia }}</title>
+    <style>
+        * {
+            color: black;
+        }
+
+        body {
+            font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+            color: black;
+        }
+
+        .name-company {
+            font-size: 30px;
+            padding: 0;
+            margin: 0;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        table thead tr th {
+            border: 1px solid black !important;
+            padding: 3px;
+        }
+
+        table tbody tr td {
+            border: 1px solid black;
+            padding: 3px;
+        }
+
+        .img-logo {
+            margin-top: 10px;
+            width: 75px;
+            height: 75px;
+            margin-bottom: 10px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <img src="{% static 'img/img_empresa/logo123.png' %}" class="img-fluid d-block mx-auto img-logo" style="width: 250px; height: 100px;">
+    <h1 class="name-company"></h1>
+    <p class="text-center">
+        {{ comp.address }}<br>
+        <b>Teléfono: </b>{{ comp.numero }}<br>
+    </p>
+    <p>
+        <b>Registro N:</b> {{ number }}<br>
+        <b>Guia :</b> {{ numero_guia }}<br>
+        <b>Fecha de Ingreso:</b> {{ fecha_ingreso }}<br>
+    </p>
+    <table class="table" style="width: 100%;">
+        <thead>
+        <tr style="border: 1px solid black;">
+            <th style="width: 20%;" colspan="2" class="text-center">Cantidad</th>
+            <th style="width: 30%;">Producto</th>
+            <th style="width: 20%;" colspan="2" class="text-center">Ingreso</th>
+           {% comment %} <th style="width: 20%;">P.Unitario</th>
+            <th style="width: 10%;" class="text-right">Subtotal</th>{% endcomment %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for det in detalle_fac %}
+            <tr>
+                <td class="text-center">{{ det.cantidad_usar|floatformat:0 }}</td>
+                <td class="text-center">{{ det.producto_empresa.nombre_prod.presentacion }} {{ det.producto_empresa.nombre_prod.peso_presentacion }} {{ det.producto_empresa.nombre_prod.unid_medida }}</td>
+                <td>{{ det.producto_empresa.nombre_prod.nombre }}</td>
+                <td class="text-center">{{ det.cantidad_ingreso }}</td>
+                <td class="text-center">
+                    {% if det.producto_empresa.nombre_prod.unid_aplicacion == 'LB' %}
+                        LIBRAS
+                    {% elif det.producto_empresa.nombre_prod.unid_aplicacion == 'GR' %}
+                        GRAMOS
+                    {% elif det.producto_empresa.nombre_prod.unid_aplicacion == 'KG' %}
+                        KILOGRAMOS
+                    {% elif det.producto_empresa.nombre_prod.unid_aplicacion == 'CA' %}
+                        CANECAS
+                    {% else %}
+                        MILILITROS
+                    {% endif %}
+                </td>
+                {% comment %}<td class="text-center">{{ det.price|floatformat:2 }}</td>
+                <td class="text-right">{{ det.subtotal|floatformat:2 }}</td>{% endcomment %}
+            </tr>
+        {% endfor %}
+        {% comment %}<tr>
+            <td colspan="6" class="text-right"><b>Subtotal</b></td>
+            <td class="text-right">{{ sale.subtotal|floatformat:2 }}</td>
+        </tr>
+        <tr>
+            <td colspan="6" class="text-right"><b>Iva %</b></td>
+            <td class="text-right">{{ sale.iva|floatformat:2 }}</td>
+        </tr>
+        <tr>
+            <td colspan="6" class="text-right"><b>Total a pagar</b></td>
+            <td class="text-right">{{ sale.total|floatformat:2 }}</td>
+        </tr>{% endcomment %}
+        <tr>
+            <td colspan="5">
+                <p class="text-uppercase font-weight-bold text-center">
+                    Ingreso de productos <br>
+                </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

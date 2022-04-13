@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block contenido %}
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb float-sm-left">
+                        <li class="breadcrumb-item"><a href="#">{{ nombre }}&nbsp
+                            <i class="far nav-icon fa fa-home"></i></a></li>
+                        <li class="breadcrumb-item active">Listado de {{ nombre }}&nbsp
+                            <i class="far nav-icon fa fa-clipboard-check"></i></li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+
+    <!-- /.container-fluid -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-header" style="background-color:#3498DB">
+                        <h3 class="card-title">Registros de: <strong> {{ nombre }}</strong></h3>
+                        <div class="card-tools">
+                            <ul class="pagination pagination-sm float-right">
+                                <li class="page-item">
+                                    <a href="{% url 'app_empresa:crear_empresa' %}" class="btn btn-block btn-default btn-sm">
+                                        <strong><i class="fas fa-plus"></i> NUEVO REGISTRO</strong>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="tb_categoria" class="table dataTables-example">
+                            <thead>
+                            <tr role="row">
+                                <th>Siglas</th>
+                                <th>Nombre</th>
+                                <th>RUC</th>
+                                <th>Actividad</th>
+                                <th>Dirección</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for emp in object_list %}
+                                <tr role="row" class="odd">
+                                    <td><strong>{{ emp.siglas }}</strong></td>
+                                    <td>{{ emp.nombre }}</td>
+                                    <td>{{ emp.ruc }}</td>
+                                    <td>{{ emp.actividad }}</td>
+                                    <td>{{ emp.direccion }}</td>
+                                    <td class="text-center">
+                                        <a href="{% url 'app_empresa:actualizar_empresa' emp.id %}"
+                                           class="btn btn-primary btn-xs btn-flat">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'app_empresa:eliminar_empresa' emp.id %}"
+                                           class="btn btn-danger btn-xs btn-flat">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script>
+        $(function () {
+            $("#tb_categoria").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                "language": {
+                    url: '{% static 'lib/datatables-1.10.20/spanish.txt' %}'
+                }
+            });
+        });
+    </script>
+{% endblock %}
+

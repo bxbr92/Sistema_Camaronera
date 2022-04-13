@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head %}
+
+    <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/Seg_Lineal/css/jquery.dataTables.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/Seg_Lineal/css/searchPanes.dataTables.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/Seg_Lineal/css/select.dataTables.min.css' %}">
+
+{% endblock %}
+
+{% block contenido %}
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb float-sm-left">
+                        <li class="breadcrumb-item"><a href="#">{{ nombre }}&nbsp
+                            <i class="far nav-icon fa fa-home"></i></a></li>
+                        <li class="breadcrumb-item active"> Análisis por Piscinas&nbsp
+                            <i class="far nav-icon fa fa-clipboard-check"></i></li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header" style="background-color:#3498DB">
+                            <h4 class="card-title"><strong>DETALLE POR PISCINAS: {{ object_list }}</strong></h4>
+                            <div class="card-tools">
+                                <a href="#"
+                                   class="btn btn-md bg-gradient-white">
+                                    <i class="fas fa-plus"></i> &nbsp AGREGAR
+                                </a>
+                                <a href="{% url 'app_seguimiento:listar_seguimiento' %}" class="btn btn-md bg-danger">
+                                    <i class="fas fa-reply"></i> &nbsp REGRESAR
+                                </a>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-header">
+                            <div class="card-body" style="height: 900px;">
+                                <table id="tb_seguimiento" class="table" style="width:100%">
+                                    <thead style="background-color:#3498DB">
+                                    <tr>
+                                        <th style="width: 5%;">Id</th>
+                                        <th style="width: 15%;">Siglas Empresa</th>
+                                        <th style="width: 20%;">Fecha Ingreso</th>
+                                        <th style="width: 5%;">Cantidad</th>
+                                        <th style="width: 10%;">N. Guia</th>
+                                        <th style="width: 20%;">Producto</th>
+                                        <th style="width: 20%;">Responsable</th>
+                                        <th style="width: 5%;">Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <!-- PONEMOS EL OBJETO DE LA PLANTILLA-->
+                                    {% for reg in seguimiento %}
+                                        <tr>
+                                            <td style="text-align: center">{{ reg.id }}</td>
+                                            <td style="text-align: center">{{ reg.producto_empresa.nombre_empresa.siglas }}</td>
+                                            <td style="text-align: center">{{ reg.fecha_ingreso }}</td>
+                                            <td style="text-align: center">{{ reg.cantidad_ingreso }}</td>
+                                            <td style="text-align: center">{{ reg.cantidad_egreso }}</td>
+                                            <td style="text-align: center">{{ reg.numero_guia }}</td>
+                                            <td style="text-align: center">{{ reg.producto_empresa.nombre_prod }}</td>
+                                            <td style="text-align: center">{{ reg.responsable_ingreso }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% comment %}<div class="col-lg-2">
+                    <div class="card">
+                        <div class="card-header" style="background-color:#3498DB">
+                            <h4 class="card-title"><strong>ANALISIS POR PISCINAS: </strong></h4>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                        class="fas fa-minus"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body table-responsive p-0" style="height: 1030px;">
+                            <table class="table table-head-fixed text-nowrap" id="tb_piscina">
+                                <thead>
+                                <tr>
+                                    <th scope="col" style="width: 60%;">Piscinas</th>
+                                    <th scope="col" style="width: 10%;">Ver</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for pis in piscinas %}
+                                    <tr>
+                                        <td>{{ pis.numero }}</td>
+                                        <td>
+                                            <a href="{% url 'app_seguimiento:listar_seguimiento_det_piscina' pis.orden %}"
+                                               class="btn-primary btn btn-xs">
+                                                <i class="fas fa-search"> </i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>{% endcomment %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script src="{% static 'lib/datatables-1.10.20/Seg_Lineal/js/dataTables.searchPanes.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/Seg_Lineal/js/jquery-3.5.1.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/Seg_Lineal/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/Seg_Lineal/js/dataTables.select.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/Seg_Lineal/js/highcharts.js' %}"></script>
+
+{#    <script src="{% static 'lib/datatables-1.10.20/Seg_Lineal/pdf/js/buttons.html5.min.js' %}"></script>#}
+{#    <script src="{% static 'lib/datatables-1.10.20/Seg_Lineal/pdf/js/dataTables.buttons.min.js' %}"></script>#}
+{#    <script src="{% static 'lib/datatables-1.10.20/Seg_Lineal/pdf/js/pdfmake.min.js' %}"></script>#}
+{#    <script src="{% static 'lib/datatables-1.10.20/Seg_Lineal/pdf/js/vfs_fonts.js' %}"></script>#}
+
+    <script src="{% static 'acciones/app_datatable/jquery/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'acciones/app_datatable/popper/popper.min.js' %}"></script>
+    <script src="{% static 'acciones/app_datatable/bootstrap/js/bootstrap.min.js' %}"></script>
+    <!-- datatables JS -->
+    <script type="text/javascript" src="{% static 'acciones/app_datatable/datatables/datatables.min.js' %}"></script>
+    <!-- para usar botones en datatables JS -->
+    <script src="{% static 'acciones/app_datatable/datatables/Buttons-1.5.6/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'acciones/app_datatable/datatables/JSZip-2.5.0/jszip.min.js' %}"></script>
+    <script src="{% static 'acciones/app_datatable/datatables/pdfmake-0.1.36/pdfmake.min.js' %}"></script>
+    <script src="{% static 'acciones/app_datatable/datatables/pdfmake-0.1.36/vfs_fonts.js' %}"></script>
+    <script src="{% static 'acciones/app_datatable/datatables/Buttons-1.5.6/js/buttons.html5.min.js' %}"></script>
+    # PARA DETALLES DEL DATATABLE Y LA GRAFICA
+    <script src="{% static 'acciones/app_seglineal/segProceso.js' %}"></script>
+
+{% endblock %}
